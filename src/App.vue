@@ -1,10 +1,14 @@
 <template>
   <div id="app" class="container">
-    <Header :title="title" @show-add-task="showAddTask = !showAddTask"/>
+    <Header :title="title" @show-add-task="showAddTask = !showAddTask" />
     <div v-show="showAddTask">
-      <AddTask @add-task="addTask"/>
+      <AddTask @add-task="addTask" />
     </div>
-    <Tasks @toggle-reminder="toggleReminder" @delete-task="deleteTask"   :tasks="tasks" />
+    <Tasks
+      @toggle-reminder="toggleReminder"
+      @delete-task="deleteTask"
+      :tasks="tasks"
+    />
   </div>
 </template>
 
@@ -22,22 +26,24 @@ export default {
       showAddTask: true,
     };
   },
-  methods:{
-    toggleReminder(id){
-      this.tasks = this.tasks.map(function(task){
-        if(task.id===id){
-          return{...task , reminder: !task.reminder}
+  methods: {
+    toggleReminder(id) {
+      this.tasks = this.tasks.map((task) => {
+        if (task.id === id) {
+          return { ...task, reminder: !task.reminder };
         }
-        return task
+        return task;
+      });
+    },
+    deleteTask(id) {
+      this.tasks = this.tasks.filter((task) => task.id !== id);
+    },
+    addTask(task) {
+      const { date, text } = task;
+      if (date !== "" && text !== "") {
+        this.tasks = [...this.tasks, task];
       }
-      )
     },
-    deleteTask(id){
-      this.tasks=this.tasks.filter(task=>task.id !== id)
-    },
-    addTask(task){
-      this.tasks = [...this.tasks , task]
-    }
   },
   created() {
     this.tasks = [
